@@ -5,6 +5,7 @@ Exploring Spatial Reasoning Abilities of LLMs using Reinforcement Learning
 flowchart TD
     A[Environment] --> |Observation| B[LLM]
     B --> |Action| A
-    A --> |AgentAction, Observation, Stats| C[EvaluationModul]
+    A --> |Agent Action, Observation, Stats| C[Evaluation Module]
     B --> |Language| C
+    D[System Prompt] --> B
 ```
