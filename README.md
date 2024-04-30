@@ -2,10 +2,11 @@
 Exploring Spatial Reasoning Abilities of LLMs using Reinforcement Learning
 
 ```mermaid
-flowchart TD
-    A[Environment] --> |Observation| B[LLM]
-    D[System Prompt] --> B
-    B --> |Action| A
-    A --> |Agent Action, Observation, Stats| C[Evaluation Module]
-    B --> |Language| C
+graph TB
+    A[Evaluation Module] -- AgentAction, Observation, Stats --> B[Environment]
+    B -- Observation --> C[LLM]
+    C -- Action --> B
+    C -- Observation --> D[System Prompt]
+    D -- Example Reasoning --> E[Chain of Thought (Interaction per step)]
+    A -- Evaluation --> C
 ```
