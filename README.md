@@ -2,7 +2,7 @@
 Exploring Spatial Reasoning Abilities of LLMs using Reinforcement Learning
 
 ```mermaid
-graph TB
+graph LR
     A[Evaluation Module] -- AgentAction, Observation, Stats --> B[Environment]
     B -- Observation --> C[LLM]
     C -- Action --> B
