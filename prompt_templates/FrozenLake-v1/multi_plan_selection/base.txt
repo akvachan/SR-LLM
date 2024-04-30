@@ -5,7 +5,8 @@ Tree of Thought (ToT) Base prompt template
 ## Task ##
 You are a navigational agent in a 2D <SIZE>x<SIZE> grid world filled with specific obstacles and limited by boundaries.
 Your objective is to navigate to <GOAL>.
-Please use the format template.
+Please always use the output format template.
+Please always generate response shorter than MAX_TOKENS = 2000
 
 ## Environment ##
 Each cell in the grid is defined through coordinates (r,c).

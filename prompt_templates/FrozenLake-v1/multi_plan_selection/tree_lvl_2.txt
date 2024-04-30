@@ -8,35 +8,41 @@ For each direction, consider in one (1) sentence:
 2. Is this coordinate in a list of obstacles?
 3. Is it in the boundaries of the grid?
 4. Does this move bring you closer to or farther from your goal?
-Assign a probability of success of reaching the goal to each direction based on these factors
+Assign a probability of success of reaching the goal to each direction based on these factors (float between 0 and 1 is expected)
 
 ## Output Format ##
-MAX_TOKENS = 1000
+MAX_TOKENS = 2000
 
 Generate JSON response to the prompt in following format:
 {
     "up": {
-        "New coordinates": "",
-        "In obstacles list": "",
-        "In the grid boundaries": "",
-        "Distance to the goal": ""
+        "new_coordinates": "",
+        "is_in_obstacles": "",
+        "is_in_boundaries": "",
+        "goal_distance": ""
     },
     "down": {
-        "New coordinates": "",
-        "In obstacles list": "",
-        "In grid boundaries": "",
-        "Goal distance": ""
+        "new_coordinates": "",
+        "is_in_obstacles": "",
+        "is_in_boundaries": "",
+        "goal_distance": ""
     },
     "left": {
-        "New coordinates": "",
-        "In obstacles list": "",
-        "In grid boundaries": "",
-        "Goal distance": ""
+        "new_coordinates": "",
+        "is_in_obstacles": "",
+        "is_in_boundaries": "",
+        "goal_distance": ""
     },
     "right": {
-        "New coordinates": ""
-        "In obstacles list": ""
-        "In grid boundaries": "",
-        "Goal distance": ""
+        "new_coordinates": ""
+        "is_in_obstacles": ""
+        "is_in_boundaries": "",
+        "goal_distance": ""
+    }
+    "success_probabilities": {
+        "up" : float[0..1]
+        "down": float[0..1]
+        "left": float[0..1]
+        "right": float[0..1]
     }
 }

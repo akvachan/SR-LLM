@@ -5,8 +5,8 @@ from collections import deque
 class AStar:
     def __init__(self, map_bin: list[int], origin: list[int], goal: list[int]):
         self.map = map_bin
-        self.origin = origin
-        self.goal = goal
+        self.origin = tuple(origin)
+        self.goal = tuple(goal)
         self.path = deque()
 
     @staticmethod
@@ -29,7 +29,7 @@ class AStar:
         while open_set:
             current = heapq.heappop(open_set)[1]
             if current == self.goal:
-                return self.reconstruct_path(came_from, current)
+                return list(self.reconstruct_path(came_from, current))
             neighbors = [(current[0] + 1, current[1]), (current[0] - 1, current[1]),
                          (current[0], current[1] + 1), (current[0], current[1] - 1)]
             for neighbor in neighbors:

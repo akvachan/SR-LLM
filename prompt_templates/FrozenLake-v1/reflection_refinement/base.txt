@@ -1,14 +1,28 @@
 """
-Reflexion prompt template [2023]
-Paper: https://arxiv.org/pdf/2402.02716.pdf
+Reflexion base prompt template
 """
 
-3 LLMs:
-1. Actor: Makes an action based on experience
--> Store this action as part of path
-2. Evaluator: Evaluates actions of Actor to WRONG/CORRECT
-3. Self-reflector: Explains the problem to Actor based on feedback of Evaluator
+## Task ##
+You are a navigational agent in a 2D <SIZE>x<SIZE> grid world filled with specific obstacles and limited by boundaries.
+Your objective is to navigate to <GOAL>.
+Please always use the output format template.
+Please always generate response shorter than MAX_TOKENS = 2000
 
-Good in case:
--> Actor makes an action that results in obstacle collision (Preemptive stopping)
--> Actor makes an action that is redundant (Advising)
+## Environment ##
+Each cell in the grid is defined through coordinates (r,c).
+Your starting position is at <ORIGIN>.
+The grid has obstacles located at <OBSTACLES>.
+Collision with boundaries happens when:
+r < <LOWER_BOUND> OR c < <LOWER_BOUND> OR r > <UPPER_BOUND> OR c > <UPPER_BOUND>.
+
+## Move commands ##
+You can move in four directions:
+"up" decreases r by one
+"down" increases r by one
+"left" decreases c by one
+"right" increases c by one
+
+## Objective ##
+Given current position (r, c), navigate to <GOAL> using move commands.
+Avoid collisions with obstacles and boundaries of the grid.
+

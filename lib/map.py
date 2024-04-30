@@ -1,32 +1,6 @@
 from abc import ABC, abstractmethod
 
 
-class Map:
-    """
-    Map class represents a game map
-    """
-
-    def __init__(
-            self,
-            name: str,
-            x_size: int,
-            y_size: int,
-            z_size: int,
-            origins: list[int],
-            goals: list[int],
-            obstacles: list[int],
-            description: str = ""
-    ):
-        self.name = name
-        self.description = description
-        self.x_size = x_size
-        self.y_size = y_size
-        self.z_size = z_size
-        self.obstacles = obstacles
-        self.origins = origins
-        self.goals = goals
-
-
 class MapGenerator(ABC):
     """
     Abstract map generation class.
@@ -97,10 +71,16 @@ class MapSolver(ABC):
     def maps_dir(self) -> str:
         ...
 
-    @abstractmethod
-    def solve_batch(self, *args) -> None:
+    @property
+    def map_name(self) -> str:
         ...
 
+    @classmethod
     @abstractmethod
-    def solve_single(self, *args) -> None:
+    def solve_batch(cls, *args) -> None:
+        ...
+
+    @classmethod
+    @abstractmethod
+    def solve_single(cls, *args) -> None:
         ...
