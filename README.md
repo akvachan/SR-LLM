@@ -7,6 +7,5 @@ graph LR
     B -- Observation --> C[LLM]
     C -- Action --> B
     D[System Prompt] ---> C
-    A -- Evaluation --> C
     C -- Language --> A
 ```
