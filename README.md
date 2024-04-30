@@ -1,6 +1,7 @@
 # SR-LLM
 Exploring Spatial Reasoning Abilities of LLMs using Reinforcement Learning
 
+CoT Diagram
 ```mermaid
 graph LR
     A[Evaluation Module] -- AgentAction, Observation, Stats --> B[Environment]
@@ -9,3 +10,10 @@ graph LR
     D[System Prompt] ---> C
     C -- Language --> A
 ```
+
+ToT Diagram
+...
+
+
+Reflexion Diagram
+...
