@@ -1,0 +1,17 @@
+"""
+Tree of Thought (ToT) Level 1 prompt template
+"""
+
+## Prompt ##
+<FEEDBACK>, in 4 sentences brainstorm and analyze the immediate outcomes of each possible move: "up", "down", "left", and "right".
+
+## Output Format ##
+MAX_TOKENS = 2000
+
+Generate JSON response to the prompt in following format:
+{
+    "up": "",
+    "down": "",
+    "left": "",
+    "right": ""
+}

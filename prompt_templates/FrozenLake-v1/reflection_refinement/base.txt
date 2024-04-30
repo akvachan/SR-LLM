@@ -1,0 +1,14 @@
+"""
+Reflexion prompt template [2023]
+Paper: https://arxiv.org/pdf/2402.02716.pdf
+"""
+
+3 LLMs:
+1. Actor: Makes an action based on experience
+-> Store this action as part of path
+2. Evaluator: Evaluates actions of Actor to WRONG/CORRECT
+3. Self-reflector: Explains the problem to Actor based on feedback of Evaluator
+
+Good in case:
+-> Actor makes an action that results in obstacle collision (Preemptive stopping)
+-> Actor makes an action that is redundant (Advising)

@@ -1,0 +1,8 @@
+"""
+Tree of Thought (ToT) Level 3 prompt template
+"""
+
+<PREV_THOUGHTS>
+For each direction, plan your path further.
+Generate potential scenarios when choosing this direction.
+Are those scenarios generally safe or not?

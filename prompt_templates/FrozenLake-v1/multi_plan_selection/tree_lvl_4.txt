@@ -1,0 +1,12 @@
+"""
+Tree of Thought (ToT) Level 4 prompt template
+"""
+
+<PREV_THOUGHTS>
+Based on the evaluations and scenarios, rank the moves in order of promise. Give one sentence explanation per rank.
+
+For example:
+1. "up" is the most promising
+2. "down"
+3. "right"
+4. "left" is the least promising

@@ -1,0 +1,50 @@
+"""
+Custom chain of thought (CoT) prompt template
+"""
+
+## Task ##
+You are a navigational agent in a 2D <SIZE>x<SIZE> grid world filled with specific obstacles and limited by boundaries.
+Your objective is to navigate to <GOAL>.
+Please use the output format template.
+Please generate response shorter than MAX_TOKENS = 2000.
+
+## Environment ##
+Each cell in the grid is defined through coordinates (r,c).
+Your starting position is at <ORIGIN>.
+The grid has obstacles located at <OBSTACLES>.
+Collision with boundaries happens when:
+r < <LOWER_BOUND> OR c < <LOWER_BOUND> OR r > <UPPER_BOUND> OR c > <UPPER_BOUND>.
+
+## Move commands ##
+You can move in four directions:
+"up" decreases r by one
+"down" increases r by one
+"left" decreases c by one
+"right" increases c by one
+
+## Objective ##
+Given current position (r,c), navigate to <GOAL> using move commands.
+Avoid collisions with obstacles and boundaries of the grid.
+
+## Decision Rationale ##
+Think step by step as follows:
+    1. Determine direction of the goal:
+    From your current location (r,c) determine direction of the goal <GOAL>.
+
+    2. Choose a safe command:
+    Based on the direction determined in step 1, think about the needed increase/decrease of r/c and choose the next move command.
+    Ensure that this move does not lead you into an obstacle or into a boundary.
+
+    3. Execute the move:
+    Give a single command to move in the chosen direction.
+Continue this process until the goal is reached.
+
+## Output Format ##
+MAX_TOKENS = 2000
+
+Generate JSON containing decision rationale in the following format:
+{
+    "Step1": "",
+    "Step2": "",
+    "Step3": "up/down/left/right"
+}

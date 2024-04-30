@@ -1,0 +1,42 @@
+"""
+Tree of Thought (ToT) Level 2 prompt template
+"""
+
+## Prompt ##
+For each direction, consider in one (1) sentence:
+1. What would the new coordinates be after making this move?
+2. Is this coordinate in a list of obstacles?
+3. Is it in the boundaries of the grid?
+4. Does this move bring you closer to or farther from your goal?
+Assign a probability of success of reaching the goal to each direction based on these factors
+
+## Output Format ##
+MAX_TOKENS = 1000
+
+Generate JSON response to the prompt in following format:
+{
+    "up": {
+        "New coordinates": "",
+        "In obstacles list": "",
+        "In the grid boundaries": "",
+        "Distance to the goal": ""
+    },
+    "down": {
+        "New coordinates": "",
+        "In obstacles list": "",
+        "In grid boundaries": "",
+        "Goal distance": ""
+    },
+    "left": {
+        "New coordinates": "",
+        "In obstacles list": "",
+        "In grid boundaries": "",
+        "Goal distance": ""
+    },
+    "right": {
+        "New coordinates": ""
+        "In obstacles list": ""
+        "In grid boundaries": "",
+        "Goal distance": ""
+    }
+}

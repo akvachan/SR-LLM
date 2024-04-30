@@ -1,0 +1,106 @@
+from abc import ABC, abstractmethod
+
+
+class Map:
+    """
+    Map class represents a game map
+    """
+
+    def __init__(
+            self,
+            name: str,
+            x_size: int,
+            y_size: int,
+            z_size: int,
+            origins: list[int],
+            goals: list[int],
+            obstacles: list[int],
+            description: str = ""
+    ):
+        self.name = name
+        self.description = description
+        self.x_size = x_size
+        self.y_size = y_size
+        self.z_size = z_size
+        self.obstacles = obstacles
+        self.origins = origins
+        self.goals = goals
+
+
+class MapGenerator(ABC):
+    """
+    Abstract map generation class.
+    Implement this class for custom map generation logic.
+    MapGenerator methods are responsible for generating custom maps and saving them on disk.
+
+    Attributes
+    ----------
+    maps_dir: str
+        Name of directory where generated maps are stored, usually just "maps".
+    map_name: str
+        Name of your custom map, usually in PascalCase and with version number, e.g.: "MyMap-v2".
+
+    Methods
+    -------
+    generate_batch(*args) -> None
+        Generates a batch (multiple) maps and saves them on disk.
+    generate_single(*args) -> None
+        Generates a single map and (potentially) saves it on disk.
+    """
+
+    @property
+    def maps_dir(self) -> str:
+        ...
+
+    @property
+    def map_name(self) -> str:
+        ...
+
+    @classmethod
+    @abstractmethod
+    def generate_batch(cls, *args) -> None:
+        ...
+
+    @classmethod
+    @abstractmethod
+    def generate_single(cls, *args) -> None:
+        ...
+
+
+class MapManipulator(ABC):
+    """
+    Abstract map manipulation and altering class.
+    Implement this class in case you need to manipulate or alter your map.
+    """
+    ...
+
+
+class MapSolver(ABC):
+    """
+    Abstract class for solving your map, e.g., finding optimal paths.
+    Implement this class in case you want to generate solutions to your map.
+
+    Attributes
+    ----------
+    maps_dir: str
+        Name of directory where generated maps are stored, usually just "maps".
+
+    Methods
+    -------
+    solve_batch(*args) -> None
+        Solves a batch (multiple) maps and saves solutions on disk.
+    solve_single(*args) -> None
+        Solves a single map and saves its solution on disk.
+    """
+
+    @property
+    def maps_dir(self) -> str:
+        ...
+
+    @abstractmethod
+    def solve_batch(self, *args) -> None:
+        ...
+
+    @abstractmethod
+    def solve_single(self, *args) -> None:
+        ...
