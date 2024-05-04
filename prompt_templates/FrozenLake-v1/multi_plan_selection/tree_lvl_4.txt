@@ -1,29 +1,3 @@
-"""
-Tree of Thought (ToT) Level 4 prompt template
-"""
-
+## Prompt ##
 Based on the evaluations and scenarios, rank the moves in order of promise from most promising to the least promising.
 Give one sentence explanation per rank.
-
-## Output Format ##
-MAX_TOKENS = 2000
-
-Generate JSON response to the prompt in following format:
-{
-    "rank_1": {
-        "move": "up/down/left/right",
-        "explanation": ""
-    },
-    "rank_2": {
-        "move": "up/down/left/right",
-        "explanation": ""
-    }
-    "rank_3": {
-        "move": "up/down/left/right",
-        "explanation": ""
-    },
-    "rank_4": {
-        "move": "up/down/left/right",
-        "explanation": ""
-    }
-}

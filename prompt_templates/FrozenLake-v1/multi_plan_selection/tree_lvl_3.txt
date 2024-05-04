@@ -1,31 +1,4 @@
-"""
-Tree of Thought (ToT) Level 3 prompt template
-"""
-
 ## Prompt ##
 For each direction, plan your path further.
 Generate potential scenarios when choosing this direction.
-Are those scenarios generally safe or not (bool is expected)?
-
-## Output Format ##
-MAX_TOKENS = 2000
-
-Generate JSON response to the prompt in following format:
-{
-    "up": {
-        "scenarios": "",
-        "scenarios_safe": bool
-    },
-    "down": {
-        "scenarios": "",
-        "scenarios_safe": bool
-    } ,
-    "left": {
-        "scenarios": "",
-        "scenarios_safe": bool
-    },
-    "right": {
-        "scenarios": "",
-        "scenarios_safe": bool
-    }
-}
+Are those scenarios generally safe or not (boolean is expected)?

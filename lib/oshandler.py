@@ -51,8 +51,11 @@ class OSHandler:
         :param path:
         :return:
         """
-        with open(os.path.join(*path), 'r') as f:
+        path = os.path.join(*path)
+        with open(path) as f:
             return f.read()
+
+
 
     @staticmethod
     def read_from_json(*path) -> dict:
@@ -77,14 +80,13 @@ class OSHandler:
 
 
     @staticmethod
-    def get_project_root(_file):
+    def get_project_root():
         """
-        CAREFUL: This method works only from within custom subpackage
+        CAREFUL: Hardcoded for now
 
-        :param _file:
         :return:
         """
-        return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_file))))
+        return os.path.join("/", "Users", "arseniikvachan", "PycharmProjects", "SR-LLM")
 
     @staticmethod
     def get_file_list(*path) -> list[str]:

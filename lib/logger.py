@@ -15,9 +15,8 @@ class Logger(ABC):
     # -chat_history
     # --FrozenLake-v1
     # ---gpt-4-turbo
-    # ----29_04_2024
-    # -----chat_history_1.log
-    # ------Time, Role, Message, Comment
+    # ----chat_history_1.log
+    # -----Time, Role, Content
     #
     # -errors
     # --FrozenLake-v1

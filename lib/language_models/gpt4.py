@@ -16,6 +16,7 @@ messages = [
   {"role": "system", "name":"example_user", "content": "Let's circle back when we have more bandwidth to touch base on opportunities for increased leverage."},
   {"role": "system", "name": "example_assistant", "content": "Let's talk later when we're less busy about how to do better."},
   {"role": "user", "content": "This late pivot means we don't have time to boil the ocean for the client deliverable."},
+  {"role": "assistant", "content": "ANTWORT AUF OBEN"}
 ]
 '''
 
@@ -31,7 +32,7 @@ class GPT4LanguageModel(LanguageModel):
         "type": "json_object"
     }
     retry: int = 1
-    client: Callable = OpenAI
+    client = OpenAI()
 
     def __init__(self, system_message: Prompt):
         self.system_message = system_message
@@ -50,16 +51,15 @@ class GPT4LanguageModel(LanguageModel):
         response = self.client.chat.completions.create(
             model=self.name,
             temperature=self.temperature,
-            top_p=self.top_p,
             max_tokens=self.max_tokens,
             response_format=self.response_format,
             messages=self.messages,
         )
 
-        assistant_message = response.choices[0].message
+        assistant_message = dict(response.choices[0].message)
         self.messages.append(assistant_message)
 
-        response_string = assistant_message.content
+        response_string = assistant_message["content"]
 
         if not tools.is_json(response_string) and self.retry:
             self.generate_response(

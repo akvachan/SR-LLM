@@ -10,7 +10,7 @@ import random
 import gymnasium as gym
 from typing import Callable
 
-PROJECT_ROOT = OSHandler.get_project_root(__file__)
+PROJECT_ROOT = OSHandler.get_project_root()
 
 
 class FrozenLakeMapGenerator(MapGenerator):
