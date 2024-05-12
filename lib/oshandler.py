@@ -34,7 +34,7 @@ class OSHandler:
             f.write(content)
 
     @staticmethod
-    def write_to_json(content: dict, *path) -> None:
+    def write_to_json(content, *path) -> None:
         """
 
         :param path:
@@ -80,7 +80,7 @@ class OSHandler:
 
 
     @staticmethod
-    def get_project_root():
+    def get_project_root() -> str:
         """
         CAREFUL: Hardcoded for now
 
@@ -91,3 +91,11 @@ class OSHandler:
     @staticmethod
     def get_file_list(*path) -> list[str]:
         return [f for f in os.listdir(os.path.join(*path)) if os.path.isfile(os.path.join(*path, f))]
+
+    @staticmethod
+    def remove_dir(*path) -> None:
+        pass
+
+    @staticmethod
+    def remove_file(*path) -> None:
+        os.remove(os.path.join(*path))

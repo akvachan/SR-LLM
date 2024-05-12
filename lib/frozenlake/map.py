@@ -1,16 +1,112 @@
 # Custom modules import
 from astar import AStar
-from map import MapGenerator, MapSolver, MapManipulator
+from map import Map, MapGenerator, MapSolver, MapManipulator
 from oshandler import OSHandler
 
 # Site modules import
 from gymnasium.envs.toy_text.frozen_lake import generate_random_map
 import re
 import random
+import os
 import gymnasium as gym
 from typing import Callable
+import jsonpickle
 
 PROJECT_ROOT = OSHandler.get_project_root()
+MAPS_DIR = os.path.join(PROJECT_ROOT, "maps", "FrozenLake-v1")
+ACTIONS = {
+    "up": 3,
+    "down": 1,
+    "left": 0,
+    "right": 2
+}
+
+
+class FrozenLakeMap(Map):
+    actions = {
+        "up": 3,
+        "down": 1,
+        "left": 0,
+        "right": 2
+    }
+
+    def __init__(
+            self,
+            name: str = "",
+            size: int = 0,
+            origin: tuple[int, int] = (0, 0),
+            goals: list[tuple[int, int]] = [],
+            obstacles: list[tuple[int, int]] = [],
+            binarr: list[list[int]] = [],
+            strarr: list[str] = [],
+            solution: list[list[int]] = [],
+    ):
+        self.name = name
+        self.size = size
+        self.origin = origin
+        self.goals = goals
+        self.obstacles = obstacles
+        self.binarr = binarr
+        self.strarr = strarr
+        self.solution = solution
+
+    def set_solution(self, solution) -> None:
+        self.solution = solution
+
+    def set_name(self, name) -> None:
+        self.name = name
+
+    def serialize(self) -> None:
+        json_str = jsonpickle.encode(self)
+        OSHandler.write_to_json(json_str, os.path.join(MAPS_DIR, self.name + ".json"))
+
+    @staticmethod
+    def deserialize(full_path: str):
+        json_str = OSHandler.read_from_json(full_path)
+        return jsonpickle.decode(json_str)
+
+    def direction_to_action(self, direction):
+        return self.actions[direction]
+
+    def determine_position(self, observation):
+        return observation // self.size, observation % self.size
+
+    def has_escaped_trap(self, curr_pos: tuple[int, int], prev_pos: tuple[int, int]) -> bool:
+        """
+        Method that checks if the agent escaped the trap.
+        Trap is defined as a position from which there is only one exit.
+        Escaping the trap means previously being in a trap and then not anymore.
+
+        :param _map: A map in list of string format
+        :param prev_pos: Coordinates of the previous position on the map
+        :param curr_pos: Coordinates of the current position on the map
+        :return: Boolean value indicating if trap was escaped
+        """
+        if not prev_pos or not curr_pos:
+            return False
+
+        def count_exits(map_grid, row, col):
+            rows = len(map_grid)
+            cols = len(map_grid[0])
+            exit_count = 0
+            directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+            for d in directions:
+                new_row, new_col = row + d[0], col + d[1]
+                if 0 <= new_row < rows and 0 <= new_col < cols:
+                    if map_grid[new_row][new_col] != 'H':
+                        exit_count += 1
+            return exit_count
+
+        def is_trapped(map_grid, row, col):
+            return count_exits(map_grid, row, col) == 1
+
+        prev_row, prev_col = prev_pos
+        curr_row, curr_col = curr_pos
+
+        was_trapped = is_trapped(self.strarr, prev_row, prev_col)
+        is_not_trapped = not is_trapped(self.strarr, curr_row, curr_col)
+
+        return was_trapped and is_not_trapped
 
 
 class FrozenLakeMapGenerator(MapGenerator):
@@ -18,8 +114,7 @@ class FrozenLakeMapGenerator(MapGenerator):
     Class responsible for generating the frozenlake map
     """
 
-    maps_dir: str = "maps"
-    map_name: str = "FrozenLake-v1"
+    map_name = "FrozenLake-v1"
 
     @classmethod
     def generate_batch(cls, map_sizes_classes: list[int], proportions: list[float], total_count: int) -> None:
@@ -31,8 +126,8 @@ class FrozenLakeMapGenerator(MapGenerator):
         :param total_count: Total number of maps to generate, e.g. 200
         :return:
         """
-        if not OSHandler.check_path(PROJECT_ROOT, cls.maps_dir, cls.map_name):
-            OSHandler.make_dir(PROJECT_ROOT, cls.maps_dir, cls.map_name)
+        if not OSHandler.check_path(MAPS_DIR):
+            OSHandler.make_dir(MAPS_DIR)
         map_sizes = cls.generate_random_map_sizes(map_sizes_classes, proportions, total_count)
         for _id, map_size in enumerate(map_sizes):
             cls.generate_single(_id, map_size, "ansi")
@@ -54,9 +149,9 @@ class FrozenLakeMapGenerator(MapGenerator):
 
         cleaned_map = FrozenLakeMapManipulator.remove_ansi(rendered_map)
         randomized_map = FrozenLakeMapManipulator.randomize(cleaned_map)
-        map_data = FrozenLakeMapManipulator.gather_data(randomized_map, _id)
-
-        OSHandler.write_to_json(map_data, PROJECT_ROOT, cls.maps_dir, cls.map_name, f"fl{_id}_{size}.json")
+        map_obj = FrozenLakeMapManipulator.gather_data(randomized_map, _id)
+        map_obj.set_name("fl_" + str(size) + "_" + str(_id))
+        map_obj.serialize()
 
     @staticmethod
     def generate_random_map_sizes(map_sizes_classes, proportions, total_count) -> list[int]:
@@ -144,7 +239,7 @@ class FrozenLakeMapManipulator(MapManipulator):
         map_name = f"fl{_id}_{map_size}.json"
 
         origin = None
-        goal = None
+        goals = []
         obstacles = []
         map_bin = []
 
@@ -156,6 +251,7 @@ class FrozenLakeMapManipulator(MapManipulator):
                     map_bin_row.append(0)
                 elif char == 'G':
                     goal = (r, c)
+                    goals.append(goal)
                     map_bin_row.append(0)
                 elif char == 'H':
                     obstacles.append((r, c))
@@ -164,52 +260,17 @@ class FrozenLakeMapManipulator(MapManipulator):
                     map_bin_row.append(0)
             map_bin.append(map_bin_row)
 
-        map_data = {
-            "map_name": map_name,
-            "map_size": map_size,
-            "origin": origin,
-            "goal": goal,
-            "obstacles": obstacles,
-            "map_str": map_list,
-            "map_bin": map_bin
-        }
+        map_obj = FrozenLakeMap(
+            name=map_name,
+            size=map_size,
+            origin=origin,
+            goals=goals,
+            obstacles=obstacles,
+            binarr=map_bin,
+            strarr=map_list,
+        )
 
-        return map_data
-
-    @staticmethod
-    def has_escaped_trap(_map: list[str], prev_pos: tuple[int, int], curr_pos: tuple[int, int]) -> bool:
-        """
-        Method that checks if the agent escaped the trap.
-        Trap is defined as a position from which there is only one exit.
-        Escaping the trap means previously being in a trap and then not anymore.
-
-        :param _map: A map in list of string format
-        :param prev_pos: Coordinates of the previous position on the map
-        :param curr_pos: Coordinates of the current position on the map
-        :return: Boolean value indicating if trap was escaped
-        """
-        def count_exits(map_grid, row, col):
-            rows = len(map_grid)
-            cols = len(map_grid[0])
-            exit_count = 0
-            directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-            for d in directions:
-                new_row, new_col = row + d[0], col + d[1]
-                if 0 <= new_row < rows and 0 <= new_col < cols:
-                    if map_grid[new_row][new_col] != 'H':
-                        exit_count += 1
-            return exit_count
-
-        def is_trapped(map_grid, row, col):
-            return count_exits(map_grid, row, col) == 1
-
-        prev_row, prev_col = prev_pos
-        curr_row, curr_col = curr_pos
-
-        was_trapped = is_trapped(_map, prev_row, prev_col)
-        is_not_trapped = not is_trapped(_map, curr_row, curr_col)
-
-        return was_trapped and is_not_trapped
+        return map_obj
 
 
 class FrozenLakeMapSolver(MapSolver):
@@ -217,8 +278,6 @@ class FrozenLakeMapSolver(MapSolver):
     Class responsible for solving the frozenlake map.
     """
 
-    maps_dir: str = "maps"
-    map_name: str = "FrozenLake-v1"
     algorithm: Callable = AStar
 
     @classmethod
@@ -228,7 +287,7 @@ class FrozenLakeMapSolver(MapSolver):
 
         :return:
         """
-        map_files = OSHandler.get_file_list(PROJECT_ROOT, cls.maps_dir, cls.map_name)
+        map_files = OSHandler.get_file_list(MAPS_DIR)
         for map_file in map_files:
             cls.solve_single(map_file)
 
@@ -240,38 +299,10 @@ class FrozenLakeMapSolver(MapSolver):
         :param map_file: Name of the map file in the dedicated maps directory at project root
         :return:
         """
-        cls.check_json_map(map_file)
-
-        map_dict = OSHandler.read_from_json(PROJECT_ROOT, cls.maps_dir, cls.map_name, map_file)
-        algorithm = cls.algorithm(map_bin=map_dict["map_bin"], origin=map_dict["origin"], goal=map_dict["goal"])
+        map_obj = FrozenLakeMap.deserialize(os.path.join(MAPS_DIR, map_file))
+        algorithm = cls.algorithm(map_bin=map_obj.binarr, origin=map_obj.origin, goal=map_obj.goals[0])
 
         optimal_path = algorithm.search()
-        map_dict["map_solution"] = optimal_path
+        map_obj.set_solution(optimal_path)
 
-        OSHandler.write_to_json(map_dict, PROJECT_ROOT, cls.maps_dir, cls.map_name, map_file)
-
-    @classmethod
-    def check_json_map(cls, map_file) -> None:
-        """
-        Checks if the map file is a valid json file with all the necessary information to solve the map.
-
-        :param map_file: Name of the map file in the dedicated maps directory at project root
-        :return:
-        """
-        if not map_file.endswith(".json"):
-            raise ValueError("Only .json files are supported")
-
-        if not OSHandler.check_path(PROJECT_ROOT, cls.maps_dir, cls.map_name, map_file):
-            raise FileNotFoundError(
-                f"Map {PROJECT_ROOT}/{cls.maps_dir}/{cls.map_name}/{map_file} does not exist.")
-
-        map_dict = OSHandler.read_from_json(PROJECT_ROOT, cls.maps_dir, cls.map_name, map_file)
-
-        if map_dict.get("map_bin", None) is None:
-            raise KeyError(f"Map {map_file} does not contain a valid map_bin array.")
-
-        if map_dict.get("origin", None) is None:
-            raise KeyError(f"Map {map_file} does not contain a valid origin.")
-
-        if map_dict.get("goal", None) is None:
-            raise KeyError(f"Map {map_file} does not contain a valid goal.")
+        map_obj.serialize()

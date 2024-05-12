@@ -1,6 +1,6 @@
 from oshandler import OSHandler
 
-from abc import ABC, abstractmethod
+from abc import ABC
 import json
 import os
 
@@ -27,7 +27,7 @@ class Prompt(ABC):
     def prompt_path(self) -> str:
         ...
 
-    def __init__(self, content: str = None, variables: dict[str, str] = None, has_output_scheme: bool = False) -> None:
+    def __init__(self, content: str = None, variables: dict = None, has_output_scheme: bool = False) -> None:
         """
         Prompt is created from prompt txt-file from prompt_templates.
         Give variables dictionary in case your prompt has variables that need to be defined.

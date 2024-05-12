@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+class Map(ABC):
+    ...
 
 class MapGenerator(ABC):
     """

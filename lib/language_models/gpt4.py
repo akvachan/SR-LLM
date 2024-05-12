@@ -1,75 +1,111 @@
 # Custom modules
-import tools
 from language_model import LanguageModel
 from prompt import Prompt
+import tools
 
 # Site modules
+from typing_extensions import override
+from openai.lib.streaming import AssistantEventHandler
 import tiktoken
+import time
 from openai import OpenAI
-from typing import Callable, Optional
-
-'''
-messages = [
-  {"role": "system", "content": "You are a helpful, pattern-following assistant that translates corporate jargon into plain English."},
-  {"role": "system", "name":"example_user", "content": "New synergies will help drive top-line growth."},
-  {"role": "system", "name": "example_assistant", "content": "Things working well together will increase revenue."},
-  {"role": "system", "name":"example_user", "content": "Let's circle back when we have more bandwidth to touch base on opportunities for increased leverage."},
-  {"role": "system", "name": "example_assistant", "content": "Let's talk later when we're less busy about how to do better."},
-  {"role": "user", "content": "This late pivot means we don't have time to boil the ocean for the client deliverable."},
-  {"role": "assistant", "content": "ANTWORT AUF OBEN"}
-]
-'''
 
 
 class GPT4LanguageModel(LanguageModel):
-    name: str = "gpt-4-turbo"
+    model_name: str = "gpt-4-turbo"
     description: str = "Powerful LLM from OpenAI"
-
-    # Language model specific hyperparameters
     temperature: float = 0.6
-    max_tokens: int = 2000
-    response_format: dict = {
-        "type": "json_object"
-    }
-    retry: int = 1
-    client = OpenAI()
 
-    def __init__(self, system_message: Prompt):
+    def __init__(self, agent_name, system_message: Prompt, examples: list[Prompt] = None, with_history: bool = False):
+        self.agent_name = agent_name
+        self.client = OpenAI()
         self.system_message = system_message
-        self.messages = [{
-            "role": "system",
-            "content": system_message.content
-        }]
-
-    def generate_response(self, user_message: Prompt, retry: Optional[int] = retry) -> str:
-
-        self.messages.append({
-            "role": "user",
-            "content": user_message.content
-        })
-
-        response = self.client.chat.completions.create(
-            model=self.name,
-            temperature=self.temperature,
-            max_tokens=self.max_tokens,
-            response_format=self.response_format,
-            messages=self.messages,
-        )
-
-        assistant_message = dict(response.choices[0].message)
-        self.messages.append(assistant_message)
-
-        response_string = assistant_message["content"]
-
-        if not tools.is_json(response_string) and self.retry:
-            self.generate_response(
-                Prompt(content="You gave invalid JSON response. Please try again."),
-                retry=retry-1
+        self.with_history = with_history
+        self.examples = examples
+        self.messages = None
+        self.last_request = None
+        self.last_response = None
+        if self.with_history:
+            self.assistant = self.client.beta.assistants.create(
+                name=self.agent_name,
+                instructions=self.system_message.content,
+                model=self.model_name,
             )
-        elif not tools.is_json(response_string) and not self.retry:
-            return ""
+            self.thread = self.client.beta.threads.create()
 
-        return response_string
+    def generate_response(self, user_message: Prompt):
+
+        self.last_request = {
+            "role": "user",
+            "content": user_message.content,
+        }
+
+        if self.with_history:
+            # Create a new message and add it to the messages of the thread
+            _ = self.client.beta.threads.messages.create(
+                thread_id=self.thread.id,
+                role="user",
+                content=user_message.content
+            )
+
+            # Create a new request in a specific thread to a specific assistant
+            run = self.client.beta.threads.runs.create(
+                temperature=self.temperature,
+                thread_id=self.thread.id,
+                assistant_id=self.assistant.id,
+            )
+
+            # Wait until assistant generates the message
+            while True:
+                run_status = self.client.beta.threads.runs.retrieve(
+                    thread_id=self.thread.id,
+                    run_id=run.id)
+                if run_status.status == "completed":
+                    break
+                elif run_status.status == "failed":
+                    print("Run failed:", run_status.last_error)
+                    break
+                time.sleep(1)
+
+            # Update messages in the thread
+            self.messages = self.client.beta.threads.messages.list(
+                thread_id=self.thread.id
+            )
+
+            self.last_response = self.messages.data[0]
+            out = self.last_response.content[0].text.value
+        else:
+            response = self.client.chat.completions.create(
+                model=self.model_name,
+                temperature=self.temperature,
+                response_format={"type": "json_object"},
+                messages=[
+                    {
+                        "role": "system",
+                        "content": self.system_message.content
+                    },
+                    self.last_request
+                ],
+            )
+            self.last_response = response.choices[0].message
+            out = self.last_response.content
+
+        if not tools.is_json(out):
+            raise ValueError("Output format is not JSON:\n{}".format(out))
+
+        return tools.to_json(out)
+
+    def flush_thread(self):
+        pass
+
+    def create_thread(self):
+        pass
+
+    def set_examples(self, examples):
+        self.examples = examples
+
+    def set_with_history(self, with_history):
+        self.with_history = with_history
 
     @staticmethod
     def encode(string: str) -> list[int]:
@@ -83,4 +119,3 @@ class GPT4LanguageModel(LanguageModel):
     def decode(tokens: list[int]) -> str:
         # TODO
         pass
-

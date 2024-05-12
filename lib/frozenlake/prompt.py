@@ -1,7 +1,5 @@
 import os
-import json
 from prompt import Prompt
-from oshandler import OSHandler
 
 FROZENLAKE_PROMPTS = "FrozenLake-v1"
 

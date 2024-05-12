@@ -8,25 +8,24 @@ class LanguageModel(ABC):
     """
 
     @property
-    def name(self) -> str:
+    def model_name(self) -> str:
         ...
 
     @property
     def description(self) -> str:
         ...
 
-    def __init__(self, system_message: Prompt):
-        self.system_message = system_message
-
     @abstractmethod
     def generate_response(self, user_message: Prompt) -> str:
         ...
 
     @staticmethod
+    @abstractmethod
     def encode(string: str) -> list[int]:
         ...
 
     @staticmethod
+    @abstractmethod
     def decode(tokens: list[int]) -> str:
         ...
 

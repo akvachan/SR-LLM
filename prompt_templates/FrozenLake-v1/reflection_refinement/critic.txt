@@ -1,0 +1,9 @@
+
+3 LLMs:
+1. Actor: Makes an action based on experience
+-> Store this action as part of path
+2. Critic: Evaluates actions of Actor
+
+Good in case:
+-> Actor makes an action that results in obstacle collision (Preemptive stopping)
+-> Actor makes an action that is redundant (Advising)
