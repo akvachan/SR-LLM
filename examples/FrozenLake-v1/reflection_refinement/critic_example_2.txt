@@ -1,0 +1,21 @@
+Map: 12x12
+Origin:  (11, 11)
+Goal:  (6, 10)
+Obstacles:  [(0, 2), (0, 9), (1, 5), (1, 6), (1, 7), (1, 8), (1, 11), (2, 2), (2, 6), (2, 10), (3, 2), (3, 8), (4, 1), (4, 4), (4, 9), (5, 4), (5, 5), (5, 9), (5, 10), (5, 11), (7, 1), (8, 8), (9, 6), (10, 3), (10, 6), (10, 7), (10, 10), (11, 3), (11, 7), (11, 8)]
+Current Position: (11, 11)
+
+User:
+Navigational agent decided to move down with following explanation:
+Moving down to (12, 11) avoids immediate obstacles and provides a clear path to continue navigating towards the goal.
+Please criticize and evaluate decision of navigational agent as follows:
+1. Tell whether this move is good or bad and shortly explain why. Consider following in your evaluation:
+    - Does this move result in a collision with obstacles or grid boundaries?
+    - Does this move put navigational agent in a dangerous or unsafe situation?
+    - Does this move have a potential to be beneficial in the long term?
+2. Rate the decision of navigational agent from 0 to 5 (0 being worst and 5 being best).
+
+Critic:
+{
+    "explanation": "This move is bad because moving down from (11, 11) to (12, 11) results in going out of the grid boundaries. This move immediately puts the navigational agent in an unsafe situation with no potential for any benefit.",
+    "rating": 0
+}

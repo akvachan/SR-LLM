@@ -1,0 +1,7 @@
+Map: 8x8
+Origin:  (0, 0)
+Goal:  (3, 3)
+Obstacles:  [(0, 1), (2, 1), (2, 3), (3, 0), (3, 1)]
+
+User: You are now at (2, 0). For each possible move: "up", "down", "left", and "right" brainstorm and analyze its outcome in one (1) sentence.
+Assistant: Going up to (1, 0) is a safe and very good move, since by executing it I am escaping the trap that I currently in. Down to (3, 0) is a bad move, that will result into collision with an obstacle at that position. Left is not an option since there is a grid boundary there. Moving right to (2, 1) is possible, but dangerous, there is an obstacle.

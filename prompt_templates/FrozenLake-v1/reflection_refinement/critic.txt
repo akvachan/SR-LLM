@@ -1,9 +1,10 @@
+## Prompt ##
+Navigational agent decided to move {DIRECTION} with following explanation:
+{EXPLANATION}
 
-3 LLMs:
-1. Actor: Makes an action based on experience
--> Store this action as part of path
-2. Critic: Evaluates actions of Actor
-
-Good in case:
--> Actor makes an action that results in obstacle collision (Preemptive stopping)
--> Actor makes an action that is redundant (Advising)
+Please criticize and evaluate decision of navigational agent as follows:
+1. Tell whether this move is good or bad and shortly explain why. Consider following in your evaluation:
+    - Does this move result in a collision with obstacles or grid boundaries?
+    - Does this move put navigational agent in a dangerous or unsafe situation?
+    - Does this move have a potential to be beneficial in the long term?
+2. Rate the decision of navigational agent from 0 to 5 (0 being worst and 5 being best).

@@ -1,0 +1,31 @@
+## Task ##
+You are a navigational agent in a 2D {SIZE}x{SIZE} grid world filled with specific obstacles and limited by boundaries.
+Your objective is to navigate to {GOAL}.
+If given, always use the output format template.
+Always generate response shorter than MAX_TOKENS = {MAX_TOKENS}.
+Explain the decision rationale fully.
+
+## Environment ##
+Each cell in the grid is defined through coordinates (r,c).
+Your starting position is at {ORIGIN}.
+The grid has obstacles located at {OBSTACLES}.
+Collision with boundaries happens when:
+r < {LOWER_BOUND} OR c < {LOWER_BOUND} OR r > {UPPER_BOUND} OR c > {UPPER_BOUND}.
+If you collide with obstacles the game ends immediately.
+
+## Move commands ##
+You can move in four directions:
+"up" decreases r by one
+"down" increases r by one
+"left" decreases c by one
+"right" increases c by one
+
+## Objective ##
+Given current position (r, c), navigate to {GOAL} using move commands.
+Avoid collisions with obstacles and boundaries of the grid.
+
+## Decision Rationale ##
+Think step by step as follows and explain everything:
+For each possible move: "up", "down", "left", and "right" brainstorm and analyze its outcome in one (1) sentence. Then consider following: What will be the new position after making this move?
+Is this position in the list of obstacles? Is it in the boundaries of the grid? What is the distance to the goal? For each direction, plan your path further in one (1) sentence. Are those scenarios generally safe or not?
+Continue this process until the goal is reached.

@@ -1,0 +1,21 @@
+Map: 4x4
+Origin:  (3, 3)
+Goal:  (3, 1)
+Obstacles:  [(1, 0), (1, 3), (2, 3), (3, 0)]
+Current Position: (3, 3)
+
+User:
+Navigational agent decided to move up with following explanation:
+Moving up to (2, 3) avoids immediate obstacles and allows you to then move left to approach the goal.
+Please criticize and evaluate decision of navigational agent as follows:
+1. Tell whether this move is good or bad and shortly explain why. Consider following in your evaluation:
+    - Does this move result in a collision with obstacles or grid boundaries?
+    - Does this move put navigational agent in a dangerous or unsafe situation?
+    - Does this move have a potential to be beneficial in the long term?
+2. Rate the decision of navigational agent from 0 to 5 (0 being worst and 5 being best).
+
+Critic:
+{
+    "explanation": "This move is bad because moving up to (2, 3) results in a collision with an obstacle. This move immediately puts the navigational agent in an unsafe situation with no potential for long-term benefit.",
+    "rating": 0
+}

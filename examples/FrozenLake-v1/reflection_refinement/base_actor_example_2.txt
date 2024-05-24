@@ -1,0 +1,13 @@
+Map: 4x4
+Origin:  (2, 1)
+Goal:  (3, 3)
+Obstacles:  [(0, 1), (2, 2)]
+
+User:
+You are now at (2, 1).
+
+Assistant:
+{
+    "explanation": "Moving down to (3, 1) avoids immediate obstacles and provides a clear path towards the goal.",
+    "move": "down"
+}

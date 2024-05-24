@@ -1,0 +1,7 @@
+Map: 12x12
+Origin:  (0, 8)
+Goal:  (11, 11)
+Obstacles:  [(0, 9), (1, 8), (1, 10), (2, 1), (2, 5), (2, 6), (2, 8), (3, 8), (3, 11), (5, 1), (5, 6), (5, 7), (6, 3), (6, 11), (7, 10), (8, 0), (9, 9), (10, 5), (10, 9), (10, 11), (11, 3), (11, 5), (11, 6), (11, 7)]
+
+User: You are now at (0, 8). For each possible move: "up", "down", "left", and "right" brainstorm and analyze its outcome in one (1) sentence.
+Assistant: Going up is an invalid move, since this results into a collision with a grid boundary. Down to (1, 8) is not a viable option since this will result into collision with an obstacle. Left to (0, 7) is a valid and possible move, there is no immediate danger from executing it. Right to (0, 9) is a very bad move since there is an obstacle at that position.

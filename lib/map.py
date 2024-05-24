@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 
+
 class Map(ABC):
-    ...
+    pass
+
 
 class MapGenerator(ABC):
     """
@@ -26,21 +28,21 @@ class MapGenerator(ABC):
 
     @property
     def maps_dir(self) -> str:
-        ...
+        pass
 
     @property
     def map_name(self) -> str:
-        ...
+        pass
 
     @classmethod
     @abstractmethod
     def generate_batch(cls, *args) -> None:
-        ...
+        pass
 
     @classmethod
     @abstractmethod
     def generate_single(cls, *args) -> None:
-        ...
+        pass
 
 
 class MapManipulator(ABC):
@@ -48,7 +50,7 @@ class MapManipulator(ABC):
     Abstract map manipulation and altering class.
     Implement this class in case you need to manipulate or alter your map.
     """
-    ...
+    pass
 
 
 class MapSolver(ABC):
@@ -71,18 +73,18 @@ class MapSolver(ABC):
 
     @property
     def maps_dir(self) -> str:
-        ...
+        pass
 
     @property
     def map_name(self) -> str:
-        ...
+        pass
 
     @classmethod
     @abstractmethod
     def solve_batch(cls, *args) -> None:
-        ...
+        pass
 
     @classmethod
     @abstractmethod
     def solve_single(cls, *args) -> None:
-        ...
+        pass

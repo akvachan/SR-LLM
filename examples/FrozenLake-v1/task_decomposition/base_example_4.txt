@@ -1,0 +1,12 @@
+Map: 8x8
+Origin:  (7, 7)
+Goal:  (3, 5)
+Obstacles:  [(0, 1), (0, 4), (2, 2), (2, 7), (3, 0), (3, 7), (4, 0), (4, 5), (5, 3), (5, 6), (5, 7), (6, 0), (6, 4), (6, 6), (7, 2)]
+
+User: You are now at (7, 7).
+Assistant:
+{
+"step_1": "I am currently at (7, 7), the goal is at (3, 5), which means it is 4 rows above and 2 columns to the left from me.",
+"step_2": "Moving up to (6, 7) will result in an entrapped position, since there are obstacles surrounding this position at (5, 7), (6, 6) and (5, 6). Moving up or down is also not an option since it will result in the collision with the boundary. So the only safe move that truly brings me closer to the goal is left.",
+"step_3": "left"
+}

@@ -1,0 +1,11 @@
+Map: 12x12
+Origin:  (2, 7)
+Goal:  (11, 11)
+Obstacles:  [(1, 6), (1, 7), (1, 8), (1, 11), (2, 6), (2, 8), (3, 8), (4, 5), (4, 8), (4, 10), (5, 6), (6, 7), (6, 8), (6, 11), (7, 5), (8, 3), (8, 11), (9, 2), (9, 7), (9, 10), (10, 0), (11, 10)]
+Current Position: (5, 5)
+
+Assistant:
+If I go up, my new position is (4, 5). This position is in the list of obstacles. It is inside the boundaries of the grid. The distance to the goal is |11 - 4| + |11 - 5| = 13. Probability of reaching the goal is 0%, because of the collision with an obstacle.
+If I go down, my new position is (6, 5). This position is not in the list of obstacles. It is inside the boundaries of the grid. The distance to the goal is |11 - 6| + |11 - 5| = 11. Probability of reaching the goal is 80%, as it reduces the distance to the goal more effectively and avoids obstacles.
+If I go left, my new position is (5, 4). This position is not in the list of obstacles. It is inside the boundaries of the grid. The distance to the goal is |11 - 5| + |11 - 4| = 13. Probability of reaching the goal is 60%, as it avoids obstacles but does not optimally reduce the distance to the goal.
+If I go right, my new position is (5, 6). This position is in the list of obstacles. It is inside the boundaries of the grid. The distance to the goal is |11 - 5| + |11 - 6| = 11. Probability of reaching the goal is 0%, because of the collision with an obstacle.

@@ -1,0 +1,12 @@
+Map: 12x12
+Origin:  (6, 3)
+Goal:  (11, 11)
+Obstacles:  [(0, 3), (1, 0), (1, 2), (1, 10), (2, 4), (2, 7), (3, 5), (3, 9), (4, 1), (4, 6), (4, 7), (4, 9), (5, 0), (5, 2), (5, 6), (6, 11), (7, 5), (7, 9), (7, 11), (8, 0), (8, 1), (8, 8), (9, 1), (9, 3), (9, 5), (9, 9), (10, 7), (10, 8), (10, 9), (11, 2), (11, 10)]
+
+User: You are now at (6, 3).
+Assistant:
+{
+"step_1": "I am currently at (6, 3), the goal is at (11, 11), which means it is 8 columns to the right and 5 rows down from my current position (lower right corner).",
+"step_2": "Moving up or left does not bring me closer to the goal and moving down to the seventh row may cause some issues in the future, since the goal is surrounded by obstacles at (11, 10), (10, 9), (9, 9), (8, 8) and (7, 9). If I go down I will need to go up at some point in order to avoid these obstacles. It is better to move right to (6, 4) and then continue moving right, since there are no obstacles on my path.",
+"step_3": "right"
+}

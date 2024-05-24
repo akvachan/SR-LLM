@@ -1,2 +1,2 @@
 ## Prompt ##
-{FEEDBACK}, in 4 sentences brainstorm and analyze the immediate outcomes of each possible move: "up", "down", "left", and "right".
+{FEEDBACK}. For each possible move: "up", "down", "left", and "right" brainstorm and analyze its outcome in one (1) sentence.

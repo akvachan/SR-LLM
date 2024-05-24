@@ -1,0 +1,5 @@
+## Prompt ##
+Your decision to move {DIRECTION} is not optimal for following reasons:
+{EXPLANATION}
+
+Please choose a different move that is more suitable.

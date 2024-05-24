@@ -1,0 +1,7 @@
+Map: 8x8
+Origin:  (6, 1)
+Goal:  (7, 7)
+Obstacles:  [(0, 1), (1, 5), (2, 0), (2, 2), (3, 4), (4, 7), (5, 0), (5, 7), (6, 0), (6, 2), (6, 5), (6, 7), (7, 0), (7, 1)]
+
+User: You are now at (1, 7). For each possible move: "up", "down", "left", and "right" brainstorm and analyze its outcome in one (1) sentence.
+Assistant: Up to (5, 1) is a valid and good move, it does not result into collision with any obstacle. Down to (7, 1) is not an option since there is an obstacle there. Left to (6, 0) is also not an option since there is an obstacle there. Right to (6, 2) is still not an option, since there is an obstacle there.

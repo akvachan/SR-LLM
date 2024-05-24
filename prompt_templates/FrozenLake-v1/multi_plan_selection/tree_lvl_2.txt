@@ -1,7 +1,7 @@
 ## Prompt ##
 For each direction, consider in one (1) sentence:
-1. What would the new coordinates be after making this move?
-2. Is this coordinate in a list of obstacles?
+1. What will be the new position after making this move?
+2. Is this position in the list of obstacles?
 3. Is it in the boundaries of the grid?
-4. Does this move bring you closer to or farther from your goal?
-Assign a probability of success of reaching the goal to each direction based on these factors (float between 0 and 1 is expected)
+4. What is the distance to the goal?
+Assign a probability of success of reaching the goal to each direction based on these factors

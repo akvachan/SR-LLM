@@ -1,0 +1,1 @@
+"{\"py/object\": \"frozenlake.map.FrozenLakeMap\", \"name\": \"fl_4_10\", \"size\": 4, \"origin\": {\"py/tuple\": [0, 0]}, \"goals\": [{\"py/tuple\": [3, 3]}], \"obstacles\": [], \"binarr\": [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], \"strarr\": [\"SFFF\", \"FFFF\", \"FFFF\", \"FFFG\"], \"solution\": []}"

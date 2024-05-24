@@ -1,4 +1,3 @@
 ## Prompt ##
-For each direction, plan your path further.
-Generate potential scenarios when choosing this direction.
-Are those scenarios generally safe or not (boolean is expected)?
+For each direction, plan your path further in one (1) sentence.
+Are those scenarios generally safe or not?

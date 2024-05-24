@@ -1,0 +1,25 @@
+Map: 8x8
+Origin:  (2, 3)
+Goal:  (7, 7)
+Obstacles:  [(0, 2), (1, 1), (1, 2), (3, 0), (3, 5), (3, 6), (3, 7), (6, 3), (7, 5)]
+Current Position: (6, 4)
+
+Assistant:
+{
+    "rank_1": {
+        "move": "right",
+        "explanation": "Moving right to (6, 5) avoids immediate obstacles and moves closer to the goal with a clear path."
+    },
+    "rank_2": {
+        "move": "down",
+        "explanation": "Moving down to (7, 4) is safe and gets closer to the goal, though not as directly as moving right."
+    },
+    "rank_3": {
+        "move": "up",
+        "explanation": "Moving up to (5, 4) avoids immediate obstacles but increases the distance from the goal."
+    },
+    "rank_4": {
+        "move": "left",
+        "explanation": "Moving left to (6, 3) immediately hits an obstacle, making it the least promising move."
+    }
+}

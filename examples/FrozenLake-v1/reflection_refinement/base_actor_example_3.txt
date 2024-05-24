@@ -1,0 +1,13 @@
+Map: 4x4
+Origin:  (3, 3)
+Goal:  (3, 0)
+Obstacles:  [(2, 0), (3, 2)]
+
+User:
+You are now at (2, 3).
+
+Assistant:
+{
+    "explanation": "Moving left to (2, 2) avoids immediate obstacles and keeps you in a position to move towards the goal.",
+    "move": "left"
+}

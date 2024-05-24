@@ -1,0 +1,25 @@
+Map: 12x12
+Origin:  (2, 10)
+Goal:  (11, 11)
+Obstacles:  [(0, 1), (0, 3), (0, 10), (0, 11), (1, 1), (1, 2), (1, 3), (1, 6), (2, 8), (2, 9), (4, 4), (4, 8), (6, 5), (7, 3), (7, 4), (7, 5), (7, 8), (7, 11), (8, 3), (8, 4), (9, 1), (10, 2), (10, 9), (10, 11)]
+Current Position: (2, 10)
+
+Assistant
+{
+    "rank_1": {
+        "move": "down",
+        "explanation": "Moving down to (3, 10) avoids immediate obstacles and progresses towards the goal, providing a clear path further to the right or down."
+    },
+    "rank_2": {
+        "move": "right",
+        "explanation": "Moving right to (2, 11) is safe, but does not provide a clear path from obstacles further down the road.
+    },
+    "rank_3": {
+        "move": "up",
+        "explanation": "Moving up to (1, 10) is safe initially but needlessly further one away from the goal, making further progress difficult."
+    },
+    "rank_4": {
+        "move": "left",
+        "explanation": "Moving left to (2, 9) immediately encounters an obstacle.
+    },
+}

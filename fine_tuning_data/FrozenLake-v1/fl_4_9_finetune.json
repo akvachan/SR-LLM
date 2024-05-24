@@ -1,0 +1,7 @@
+[
+    {
+        "S": "## Task ##\nYou are a navigational agent in a 2D 4x4 grid world filled with specific obstacles and limited by boundaries.\nYour objective is to navigate to (3, 3).\n\n## Environment ##\nEach cell in the grid is defined through coordinates (r,c).\nYour starting position is at (2, 3).\nThe grid has obstacles located at [(0, 3), (3, 0)].\nCollision with boundaries happens when:\nr < -1 OR c < -1 OR r > 5 OR c > 5.\nIf you collide with obstacles the game ends immediately.\n\n## Move commands ##\nYou can move in four directions:\n\"up\" decreases r by one\n\"down\" increases r by one\n\"left\" decreases c by one\n\"right\" increases c by one\n\n## Objective ##\nGiven current position (r, c), navigate to (3, 3) using move commands.\nAvoid collisions with obstacles and boundaries of the grid.\n\n## Output Format ##\nGenerate JSON response to the prompt in following format:\n{\n    \"explanation\": \"\",\n    \"move\": \"up/down/left/right\"\n}",
+        "Q": "You are now at (2, 3).",
+        "A": "{\"explanation\": \"From (2, 3), moving 'down' to (3, 3) will directly reach the goal without encountering obstacles or boundaries.\", \"move\": \"down\"}"
+    }
+]

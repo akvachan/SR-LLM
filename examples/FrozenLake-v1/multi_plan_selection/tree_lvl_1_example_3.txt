@@ -1,0 +1,8 @@
+Map: 8x8
+Origin:  (7, 7)
+Goal:  (0, 7)
+Obstacles:  [(0, 1), (0, 5), (0, 6), (1, 3), (1, 4), (2, 0), (4, 2), (4, 3), (4, 4), (4, 6), (4, 7), (5, 0), (5, 1), (5, 2), (5, 7), (7, 4)]
+
+User: You are now at (7, 7). For each possible move: "up", "down", "left", and "right" brainstorm and analyze its outcome in one (1) sentence.
+Assistant: Going up to (6,7) is a valid and safe move, it brings me closer to the goal. Down is not a valid move, since I cannot go outside the boundaries of the grid. Left to (7, 6) is a possible safe move, there is no immediate danger from executing it. Moving right is not possible, since there is a grid boundary there.
+

@@ -1,0 +1,21 @@
+Map: 12x12
+Origin:  (3, 6)
+Goal:  (11, 11)
+Obstacles:  [(0, 2), (0, 3), (1, 2), (1, 4), (1, 5), (1, 9), (1, 11), (2, 2), (2, 10), (3, 1), (3, 4), (3, 7), (4, 5), (5, 3), (5, 7), (5, 8), (6, 0), (6, 1), (6, 2), (6, 3), (6, 6), (7, 4), (7, 5), (7, 6), (7, 10), (8, 0), (8, 2), (8, 9), (9, 5), (10, 1), (10, 4), (10, 10), (11, 0), (11, 6)]
+Current Position: (3, 6)
+
+User:
+Navigational agent decided to move right with following explanation:
+Moving right to (3, 7) avoids immediate obstacles and allows you to progress towards the goal with a potential clear path.
+Please criticize and evaluate decision of navigational agent as follows:
+1. Tell whether this move is good or bad and shortly explain why. Consider following in your evaluation:
+    - Does this move result in a collision with obstacles or grid boundaries?
+    - Does this move put navigational agent in a dangerous or unsafe situation?
+    - Does this move have a potential to be beneficial in the long term?
+2. Rate the decision of navigational agent from 0 to 5 (0 being worst and 5 being best).
+
+Critic:
+{
+    "explanation": "This move is bad because moving right to (3, 7) results in a collision with an obstacle, as (3, 7) is listed as an obstacle. This move puts the navigational agent in an immediate unsafe situation with no potential for long-term benefit.",
+    "rating": 0
+}

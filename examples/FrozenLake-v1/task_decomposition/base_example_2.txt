@@ -1,0 +1,12 @@
+Map: 4x4
+Origin:  (3, 3)
+Goal:  (0, 2)
+Obstacles:  [(0, 1), (1, 1), (1, 3), (2, 1), (2, 3)]
+
+User: You are now at (3, 3).
+Assistant:
+{
+"step_1": "I am currently at (3, 3), the goal is at (0, 2), which means it is one column to the left and 3 rows up from my current position.",
+"step_2": "I cannot move up to (2, 3) since this will result into collision with an obstacle. I also cannot move down and right since this will result into collision with the boundaries. The only safe and logical move is left to (3, 2). Afterward, I will continue moving up towards the goal.",
+"step_3": "left"
+}
