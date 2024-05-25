@@ -16,6 +16,7 @@ import gymnasium as gym
 import os
 import math
 import numpy as np
+import argparse
 
 MAP_NAME = "FrozenLake-v1"
 MAPS_DIR = MAPS_DIR
@@ -407,7 +408,7 @@ def task_decomposition(examples, iterations=MAX_ITERATIONS):
         )
         experiment.task_decomposition_run()
 
-        print(f"Task Decomposition {examples}-shot: {i+1} of {iterations} completed.")
+        print(f"Task Decomposition {examples}-shot: {i + 1} of {iterations} completed.")
 
 
 def multi_plan_selection(examples, iterations=MAX_ITERATIONS):
@@ -421,7 +422,7 @@ def multi_plan_selection(examples, iterations=MAX_ITERATIONS):
         )
         experiment.multi_plan_selection_run()
 
-        print(f"Multi-Plan Selection {examples}-shot: {i+1} of {iterations} completed.")
+        print(f"Multi-Plan Selection {examples}-shot: {i + 1} of {iterations} completed.")
 
 
 def reflection_refinement(examples, iterations=MAX_ITERATIONS):
@@ -434,26 +435,29 @@ def reflection_refinement(examples, iterations=MAX_ITERATIONS):
         )
         experiment.reflection_refinement_run()
 
-        print(f"Reflection Refinement {examples}-shot: {i+1} of {iterations} completed.")
+        print(f"Reflection Refinement {examples}-shot: {i + 1} of {iterations} completed.")
 
 
-def main():
-    # Zero-shot
-    # task_decomposition(0)
-    # multi_plan_selection(0)
-    # reflection_refinement(0)
-
-    # One-shot
-    # task_decomposition(1, iterations=math.ceil(MAX_ITERATIONS/2))
-    # multi_plan_selection(1, iterations=math.ceil(MAX_ITERATIONS/2))
-    # reflection_refinement(1, iterations=math.ceil(MAX_ITERATIONS/2))
-
-    # Four-shot
-    # task_decomposition(4, iterations=math.ceil(MAX_ITERATIONS/2))
-    # multi_plan_selection(4, iterations=math.ceil(MAX_ITERATIONS/2))
-    reflection_refinement(4, iterations=math.ceil(MAX_ITERATIONS/2))
+def main(prompt: str, shots: int, iterations: int):
+    if prompt == "task_decomposition":
+        task_decomposition(shots, iterations)
+    elif prompt == "reflection_refinement":
+        reflection_refinement(shots, iterations)
+    elif prompt == "multi_plan_selection":
+        multi_plan_selection(shots, iterations)
+    else:
+        raise ValueError(f"prompt {prompt} not recognized")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description="Conducts experiment on a FrozenLake-v1 map",
+        epilog="""Example usage: python experiments.py --prompt task_decomposition --shots 1 
+            --iter 64"""
+    )
+    parser.add_argument("--prompt", type=str, nargs='+', default="task_decomposition", help="Prompting strategy name")
+    parser.add_argument("--shots", type=int, nargs='+', default=0, help="Number of examples for the prompt")
+    parser.add_argument("--iter", type=int, default=1, help="Number of iterations/maps to experiment on")
+    args = parser.parse_args()
 
+    main(args.prompt, args.shots, args.iter)

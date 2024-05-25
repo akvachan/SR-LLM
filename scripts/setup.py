@@ -23,4 +23,4 @@ def add_package_to_site_packages(target_directory):
 
 
 if __name__ == "__main__":
-    add_package_to_site_packages("lib")
+    add_package_to_site_packages("src")
