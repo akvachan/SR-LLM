@@ -5,6 +5,16 @@ FROZENLAKE_PROMPTS = "FrozenLake-v1"
 FROZENLAKE_FINETUNING_PROMPTS = "FrozenLake-v1-Fine-Tuning"
 
 
+class NaiveBasePrompt(Prompt):
+    name = "naive_prompt"
+    description = "Naive prompt template"
+    output_scheme = {
+        "explanation": "",
+        "step_3": "up/down/left/right"
+    }
+    prompt_path = os.path.join(FROZENLAKE_PROMPTS, "naive", "base.txt")
+
+
 class TaskDecompositionBasePrompt(Prompt):
     name = "task_decomposition"
     description = "Custom chain of thought (CoT) prompt template"

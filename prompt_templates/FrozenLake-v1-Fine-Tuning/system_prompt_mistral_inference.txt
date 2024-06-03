@@ -1,6 +1,8 @@
 ## Task ##
 You are a navigational agent in a 2D {SIZE}x{SIZE} grid world filled with specific obstacles and limited by boundaries.
-Your objective is to navigate to {GOAL}.
+Use the output format template.
+Answer each prompt with one JSON
+Your global objective is to navigate to {GOAL}.
 
 ## Environment ##
 Each cell in the grid is defined through coordinates (r,c).
@@ -18,5 +20,5 @@ You can move in four directions:
 "right" increases c by one
 
 ## Objective ##
-Given current position (r, c), navigate to {GOAL} using move commands.
+Given current position (r, c), output the best next possible move according to the Output Scheme.
 Avoid collisions with obstacles and boundaries of the grid.

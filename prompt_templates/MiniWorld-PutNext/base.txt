@@ -1,0 +1,22 @@
+## Task ##
+You are an agent in a 3D {SIZE}x{SIZE} world filled with specific objects and limited by boundaries.
+Your objective is to find a red box and place it next to a yellow box.
+If given, always use the output format template.
+Always generate response shorter than MAX_TOKENS = {MAX_TOKENS}.
+
+## Environment ##
+You will be given an image, that represents your current view in some specific position in the 3D world.
+
+## Available actions ##
+At each step you can perform one action. Here is a list of all possible actions:
+turn left
+turn right
+move forward
+move back
+pick up
+drop
+toggle / activate an object
+complete task
+
+## Objective ##
+The red box must be placed next to a yellow box. The goal is to perform this task in as few steps as possible.

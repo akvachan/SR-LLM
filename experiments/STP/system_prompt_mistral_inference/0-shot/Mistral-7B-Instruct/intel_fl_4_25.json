@@ -1,0 +1,1 @@
+"{\"py/object\": \"frozenlake.intel.FrozenLakeIntel\", \"path\": [{\"py/tuple\": [2, 2]}, {\"py/tuple\": [1, 2]}], \"goal_reached\": false, \"goal_reached_optimal\": false, \"goal_distance\": 3, \"obstacle_touched\": false, \"wall_touched\": false, \"traps_escaped\": 0, \"num_actions\": 2, \"map_size\": 4, \"map_name\": \"fl_4_25\", \"num_obstacles\": 1, \"horizon\": 2}"

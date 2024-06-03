@@ -44,6 +44,7 @@ class OSHandler:
 
     @staticmethod
     def get_file_list(*path: str) -> List[str]:
+        print(*path)
         return [f for f in os.listdir(os.path.join(*path)) if os.path.isfile(os.path.join(*path, f))]
 
     @staticmethod

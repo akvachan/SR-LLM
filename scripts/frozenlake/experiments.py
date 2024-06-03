@@ -2,14 +2,15 @@ import random
 import time
 
 from oshandler import OSHandler
-from frozenlake.prompt import TaskDecompositionBasePrompt, MultiPlanSelectionBasePrompt, \
+from frozenlake.prompt import NaiveBasePrompt, TaskDecompositionBasePrompt, MultiPlanSelectionBasePrompt, \
     MultiPlanSelectionTreeLvl1Prompt, MultiPlanSelectionTreeLvl2Prompt, MultiPlanSelectionTreeLvl3Prompt, \
     MultiPlanSelectionTreeLvl4Prompt, ReflectionRefinementActorBasePrompt, ReflectionRefinementCriticBasePrompt, \
-    ReflectionRefinementActorRetryPrompt, ReflectionRefinementCriticPrompt
+    ReflectionRefinementActorRetryPrompt, ReflectionRefinementCriticPrompt, SystemPromptMistralInference
 from frozenlake.map import FrozenLakeMap, MAPS_DIR, PROJECT_ROOT
 from frozenlake.intel import FrozenLakeIntel
 from frozenlake.logger import ChatLogger
 from language_models.gpt4 import GPT4LanguageModel
+from language_models.mistral_7b_instruct import Mistral7bInstructLanguageModel
 from prompt import Prompt
 
 import gymnasium as gym
@@ -30,11 +31,12 @@ ACTOR_RETRIES = 3
 
 class Experiment:
 
-    def __init__(self, curr_map: FrozenLakeMap, base_prompt, examples=0):
+    def __init__(self, curr_map: FrozenLakeMap, base_prompt, lm_name=GPT4LanguageModel.model_name, examples=0):
 
         self.curr_map = curr_map
         self.base_prompt = base_prompt
         self.examples = examples
+        self.lm_name = lm_name
 
         self.logger = ChatLogger(
             location=os.path.join(
@@ -43,7 +45,7 @@ class Experiment:
                 MAP_NAME,
                 base_prompt.name,
                 f"{examples}-shot",
-                GPT4LanguageModel.model_name,
+                lm_name,
             ),
             name="chat" + "_" + curr_map.name
         )
@@ -396,6 +398,61 @@ class Experiment:
 
         environment.close()
 
+    def mistral_naive_run(self, is_cot=False):
+        language_model = Mistral7bInstructLanguageModel(
+            agent_name="FrozenLakeAgent_1",
+            system_message=self.system_message,
+        )
+
+        environment = gym.make(MAP_NAME, is_slippery=False, render_mode="human", desc=self.curr_map.strarr)
+        _ = environment.reset()
+        curr_pos = self.curr_map.origin
+        prev_pos = None
+
+        terminated = False
+        while not terminated:
+            feedback = Prompt(content=f"You are now at {tuple(curr_pos)}.")
+
+            response = language_model.generate_response(feedback, in_json=True)
+
+            lm_last_request = dict(language_model.last_request)
+            user_request, user_role = lm_last_request["content"], lm_last_request["role"]
+
+            lm_last_response = dict(language_model.last_response)
+            assistant_response, assistant_role = lm_last_response["content"], lm_last_response["role"]
+
+            self.logger.put({"role": user_role, "content": user_request.replace("\n", " ")})
+            self.logger.put({"role": assistant_role, "content": assistant_response.replace("\n", " ")})
+
+            try:
+                direction = response["step_3"] if is_cot else response["move"]
+                action = self.curr_map.direction_to_action(direction)
+            except KeyError as e:
+                print(e)
+                action = environment.action_space.sample()
+
+            observation, reward, terminated, _, info = environment.step(action)
+            curr_pos = self.curr_map.determine_position(observation)
+            self.intel.gather_intel(self.curr_map, curr_pos, prev_pos)
+            prev_pos = curr_pos
+
+            if self.intel.num_actions == self.intel.horizon:
+                terminated = True
+
+        self.intel.serialize(
+            location=os.path.join(
+                PROJECT_ROOT,
+                EXPERIMENTS_DIR,
+                "STP",
+                self.base_prompt.name,
+                f"{self.examples}-shot",
+                self.lm_name,
+            ),
+            name="intel" + "_" + self.curr_map.name
+        )
+
+        environment.close()
+
 
 def task_decomposition(examples, iterations=MAX_ITERATIONS):
     np.random.shuffle(MAPS)
@@ -411,7 +468,7 @@ def task_decomposition(examples, iterations=MAX_ITERATIONS):
         print(f"Task Decomposition {examples}-shot: {i + 1} of {iterations} completed.")
 
 
-def multi_plan_selection(examples, iterations=MAX_ITERATIONS):
+def multi_plan_selection(iterations, examples):
     np.random.shuffle(MAPS)
 
     for i in range(iterations):
@@ -425,8 +482,9 @@ def multi_plan_selection(examples, iterations=MAX_ITERATIONS):
         print(f"Multi-Plan Selection {examples}-shot: {i + 1} of {iterations} completed.")
 
 
-def reflection_refinement(examples, iterations=MAX_ITERATIONS):
+def reflection_refinement(iterations, examples):
     np.random.shuffle(MAPS)
+
     for i in range(iterations):
         experiment = Experiment(
             curr_map=FrozenLakeMap.deserialize(os.path.join(MAPS_DIR, MAPS[i])),
@@ -438,13 +496,61 @@ def reflection_refinement(examples, iterations=MAX_ITERATIONS):
         print(f"Reflection Refinement {examples}-shot: {i + 1} of {iterations} completed.")
 
 
-def main(prompt: str, shots: int, iterations: int):
+def naive(iterations, examples=0):
+    np.random.shuffle(MAPS)
+
+    for i in range(iterations):
+        experiment = Experiment(
+            curr_map=FrozenLakeMap.deserialize(os.path.join(MAPS_DIR, MAPS[i])),
+            base_prompt=NaiveBasePrompt,
+            examples=examples
+        )
+        experiment.task_decomposition_run()
+
+        print(f"Naive {examples}-shot: {i + 1} of {iterations} completed.")
+
+
+def mistral_naive(iterations, examples=0):
+    np.random.shuffle(MAPS)
+    for i in range(iterations):
+        experiment = Experiment(
+            curr_map=FrozenLakeMap.deserialize(os.path.join(MAPS_DIR, MAPS[i])),
+            base_prompt=SystemPromptMistralInference,
+            lm_name=Mistral7bInstructLanguageModel.model_name,
+            examples=examples
+        )
+        experiment.mistral_naive_run()
+
+        print(f"Naive Mistral {examples}-shot: {i + 1} of {iterations} completed")
+
+
+def mistral_task_decomposition(iterations, examples=0):
+    np.random.shuffle(MAPS)
+    for i in range(iterations):
+        experiment = Experiment(
+            curr_map=FrozenLakeMap.deserialize(os.path.join(MAPS_DIR, MAPS[i])),
+            base_prompt=TaskDecompositionBasePrompt,
+            lm_name=Mistral7bInstructLanguageModel.model_name,
+            examples=examples
+        )
+        experiment.mistral_naive_run(is_cot=True)
+
+        print(f"Naive Mistral {examples}-shot: {i + 1} of {iterations} completed")
+
+
+def main(prompt: str, iterations: int, shots: int):
     if prompt == "task_decomposition":
-        task_decomposition(shots, iterations)
+        task_decomposition(iterations, shots)
     elif prompt == "reflection_refinement":
-        reflection_refinement(shots, iterations)
+        reflection_refinement(iterations, shots)
     elif prompt == "multi_plan_selection":
-        multi_plan_selection(shots, iterations)
+        multi_plan_selection(iterations, shots)
+    elif prompt == "naive":
+        naive(iterations, shots)
+    elif prompt == "mistral_naive":
+        mistral_naive(iterations, shots)
+    elif prompt == "mistral_cot":
+        mistral_task_decomposition(iterations, shots)
     else:
         raise ValueError(f"prompt {prompt} not recognized")
 
@@ -455,9 +561,8 @@ if __name__ == "__main__":
         epilog="""Example usage: python experiments.py --prompt task_decomposition --shots 1 
             --iter 64"""
     )
-    parser.add_argument("--prompt", type=str, nargs='+', default="task_decomposition", help="Prompting strategy name")
-    parser.add_argument("--shots", type=int, nargs='+', default=0, help="Number of examples for the prompt")
-    parser.add_argument("--iter", type=int, default=1, help="Number of iterations/maps to experiment on")
+    parser.add_argument("--prompt", type=str, default="task_decomposition", help="Prompting strategy name")
+    parser.add_argument("--shots", type=int, default=0, help="Number of examples for the prompt")
+    parser.add_argument("--iter", type=int, default=MAX_ITERATIONS, help="Number of iterations/maps to experiment on")
     args = parser.parse_args()
-
-    main(args.prompt, args.shots, args.iter)
+    main(args.prompt, args.iter, args.shots)
