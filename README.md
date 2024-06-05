@@ -55,11 +55,11 @@ Overall, this thesis contributes valuable insights into the strengths and limita
 
 - **maps/**: For now only contains FrozenLake pre-generated maps with solutions in JSON-format 
 
-- **prompt_templates**: The name is self-explanatory 
+- **prompt_templates/**: The name is self-explanatory 
 
-- **scripts**: Contains CLI scripts for generating maps, solving them, visualizing them, running experiments and more! 
+- **scripts/**: Contains CLI scripts for generating maps, solving them, visualizing them, running experiments and more! 
 
-- **test**: Should contain unit-tests (WORK IN PROGRESS) 
+- **test/**: Should contain unit-tests (WORK IN PROGRESS) 
 
 ## Notebooks
 
