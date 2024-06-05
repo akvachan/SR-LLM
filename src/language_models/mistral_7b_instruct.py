@@ -6,6 +6,7 @@ import re
 
 class Mistral7bInstructLanguageModel:
     model_name = "Mistral-7B-Instruct"
+    # model_name = "Mistral-7B-Instruct (non-finetuned)"
     description = "Mistral 7B Instruct smaller LLM"
     temperature = 0.6
     max_tokens = 1000
@@ -22,6 +23,7 @@ class Mistral7bInstructLanguageModel:
         # Point to the local server
         response = self.client.chat.completions.create(
             model="arseniikvachan/FrozenLake-Mistral_merged-GGUF",
+            # model="RichardErkhov/mistralai_-_Mistral-7B-Instruct-v0.2-gguf",
             messages=[
                 {"role": "system", "content": self.system_message.content},
                 {"role": "user", "content": feedback.content}

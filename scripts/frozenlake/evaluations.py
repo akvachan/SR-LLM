@@ -4,7 +4,7 @@ from oshandler import OSHandler
 
 import os
 import argparse
-
+import
 
 def main(exp_dir: str):
     intels = OSHandler.get_file_list(exp_dir)
@@ -19,6 +19,7 @@ def main(exp_dir: str):
     for intel in intels:
         count += 1
         _intel = FrozenLakeIntel.deserialize(os.path.join(exp_dir, intel))
+        size = _intel.map_size
         num_successful_runs += 1 if _intel.goal_reached else 0
         num_optimal_runs += 1 if _intel.goal_reached_optimal else 0
         num_feasible_runs += 1 if not _intel.goal_reached and _intel.num_actions == _intel.horizon else 0
