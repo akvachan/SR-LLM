@@ -1,4 +1,4 @@
-# SR-LLM
+# spatial-llm
 
 Exploring Spatial Reasoning Abilities of LLMs. 
 
